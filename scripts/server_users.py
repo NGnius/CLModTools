@@ -16,14 +16,15 @@ except FileNotFoundError:
 
 with open(input("Where is your output log stored?"), "r") as output_log:
     contents = output_log.read()
-    users = re.findall(r"user verified: (\S+) (\S+)", contents)
+    users = re.findall(r"Creating AccountIdServerNode ([^,]+), ([^,]+), u(\S+)", contents)
+    print(users)
 
 #process new players
 new_users = set()
 for user in users:
     if user[0] not in server_users:
         new_users.add(user[0])
-        server_users[user[0]] = user[1]
+        server_users[user[0]] = user[2]
 
 should_do = get_input("Display user list? [y/n]")
 
