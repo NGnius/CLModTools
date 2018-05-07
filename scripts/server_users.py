@@ -1,8 +1,9 @@
 import json, re, sys
-#sys.path.append('../libs/')
+sys.path.append('../libs/')
 sys.path.append('libs/')
 import get_users
 
+LOG_NAME = "output_log.txt"
 
 def get_input(prompt, options={"y", "n", ""}):
     '''covenience function for nagging users for an input'''
@@ -20,7 +21,10 @@ except FileNotFoundError:
     pass
 
 # retrieve new users from output log
-new_users = get_users.get_from_log(input("Where is your output log stored?"))
+log_dir = input("Where is your output log stored?")
+if LOG_NAME not in log_dir:
+    log_dir += "/"+LOG_NAME
+new_users = get_users.get_from_log(log_dir)
 
 # process new players
 new_players = set()
