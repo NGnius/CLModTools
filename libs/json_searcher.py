@@ -40,10 +40,11 @@ def find_in_iterable(iterable, query):
         if isinstance(item, collections.Iterable):
             if query in item:
                 if isinstance(iterable, dict):
-                    result.append(item)
+                    result.append([item, iterable[item]])
                 else:
                     result.append([count, item])
             elif isinstance(item, collections.Iterable) and not isinstance(item, str):
+                # if query not found and item is iterable, continue recursion
                 returned = find_in_iterable(item, query)
                 for i in returned:
                     if isinstance(i, list):
@@ -51,6 +52,7 @@ def find_in_iterable(iterable, query):
                     else:
                         result.append([count, i])
             elif isinstance(iterable, dict) and isinstance(iterable[item], collections.Iterable):
+                # if query not found and item is iterable, continue recursion
                 returned = find_in_iterable(iterable[item], query)
                 for i in returned:
                     if isinstance(i, list):
@@ -58,8 +60,8 @@ def find_in_iterable(iterable, query):
                     else:
                         result.append([item, i])
         elif query == item:
-            if isinstance(iterable, dict):
-                result.append(item)
+            if isinstance(iterable, dict): # in case somebody is using integers (or floats or something else) as their dict keys, like an idiot
+                result.append([item, iterable[item]])
             else:
                 result.append([count, item])
         count+=1
@@ -80,4 +82,4 @@ def find_jsons(directory):
 # TESTING
 # print(find_jsons("/home/ngnius/Documents/CardLife"))
 # print(find_in_iterable(["potato", ["potato", "watermelon"], ("potato", "potato", "watermelon", ["potatototototo", "banana", "potato"])], "pot"))
-print(find("/home/ngnius/Documents/CardLife", "Potato"))
+# print(find("/home/ngnius/Documents/CardLife", "RegrowthTime"))
